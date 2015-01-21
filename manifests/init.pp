@@ -16,10 +16,10 @@
 #
 #   $servers_file       Determines where the content for the servers file comes
 #                       from. Valid values are 'template' and 'hiera'.
-#                       *template*: takes the array passed to $servers and uses it
-#                       to construct /nsr/res/servers.
+#                       *template*: takes the array passed to $servers and uses
+#                       it to construct /nsr/res/servers.
 #                       *hiera*: takes advantage of the file backend for hiera
-#                       and looks for the sepecified file there
+#                       and looks for the specified file there
 #                       (see $servers_file_name).
 #                       Type: String
 #                       Default: 'template'
@@ -52,18 +52,18 @@ class networker (
   validate_string($ensure_setting)
   validate_string($servers_file)
   validate_array($servers)
-  
+
   class { 'networker::install':
     ensure_setting => $ensure_setting,
-  } -> 
-  
+  } ->
+
   class { 'networker::config':
     servers           => $servers,
     servers_file      => $servers_file,
     servers_file_name => $servers_file_name,
   } ->
-  
+
   class { 'networker::service': }
-  
+
 
 } # end networker

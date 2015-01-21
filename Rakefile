@@ -1,8 +1,17 @@
 require 'rubygems'
+require 'puppet_blacksmith/rake_tasks'
 require 'puppetlabs_spec_helper/rake_tasks'
 require 'puppet-lint/tasks/puppet-lint'
-PuppetLint.configuration.send('disable_80chars')
-PuppetLint.configuration.ignore_paths = ["spec/**/*.pp", "pkg/**/*.pp"]
+
+exclude_paths = [
+  "pkg/**/*",
+  "vendor/**/*",
+  "spec/**/*",
+]
+
+PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
+PuppetLint.configuration.ignore_paths = exclude_paths
+PuppetSyntax.exclude_paths = exclude_paths
 
 desc "Validate manifests, templates, and ruby files"
 task :validate do
@@ -15,4 +24,10 @@ task :validate do
   Dir['templates/**/*.erb'].each do |template|
     sh "erb -P -x -T '-' #{template} | ruby -c"
   end
+end
+
+task :tests do
+  Rake::Task[:lint].invoke
+  Rake::Task[:validate].invoke
+  Rake::Task[:spec].invoke
 end
