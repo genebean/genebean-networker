@@ -11,7 +11,7 @@ class networker::install (
     } # end RedHat
 
     default        : {
-      fail("${::osfamily} is not yet supported by this module. 
+      fail("${::osfamily} is not yet supported by this module.
        Please file a bug report if it should be.")
     }
 

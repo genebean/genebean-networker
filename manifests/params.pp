@@ -1,3 +1,4 @@
+# Defaults for all parameters.
 class networker::params {
   $ensure_setting    = 'present'
   $servers           = []
