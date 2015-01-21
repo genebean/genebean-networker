@@ -1,79 +1,115 @@
+[![Build Status][travis-img-master]][travis-ci]
+[![Puppet Forge][pf-img]][pf-link]
+[![GitHub tag][gh-tag-img]][gh-link]
+
 # networker
 
 #### Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with networker](#setup)
-    * [What networker affects](#what-networker-affects)
-    * [Setup requirements](#setup-requirements)
-    * [Beginning with networker](#beginning-with-networker)
-4. [Usage - Configuration options and additional functionality](#usage)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+2. [Setup](#setup)
+3. [Usage](#usage)
+4. [Parameters](#parameters)
 5. [Limitations - OS compatibility, etc.](#limitations)
-6. [Development - Guide for contributing to the module](#development)
+6. [Development](#development)
+7. [License](#license)
 
 ## Overview
 
-A one-maybe-two sentence summary of what the module does/what problem it solves.
-This is your 30 second elevator pitch for your module. Consider including
-OS/Puppet version it works with.
+This module installs the EMC NetWorker backup client. It is assumed that
+the installation packages are available via a repository the client has
+access to.
 
-## Module Description
-
-If applicable, this section should have a brief description of the technology
-the module integrates with and what that integration enables. This section
-should answer the questions: "What does this module *do*?" and "Why would I use
-it?"
-
-If your module has a range of functionality (installation, configuration,
-management, etc.) this is the time to mention it.
 
 ## Setup
 
 ### What networker affects
 
-* A list of files, packages, services, or operations that the module will alter,
-  impact, or execute on the system it's installed on.
-* This is a great place to stick any warnings.
-* Can be in list or paragraph form.
+* the `lgtoclnt` and `lgtoman` packages
+* the content in `/nsr/res/servers`
+* the service `networker`
 
-### Setup Requirements **OPTIONAL**
+### Setup Requirements
 
-If your module requires anything extra before setting up (pluginsync enabled,
-etc.), mention it here.
+An assumption is made that you have setup a private repository to hold the
+packages for installing the NetWorker client.
 
 ### Beginning with networker
 
-The very basic steps needed for a user to get the module up and running.
-
-If your most recent release breaks compatibility or requires particular steps
-for upgrading, you may wish to include an additional section here: Upgrading
-(For an example, see http://forge.puppetlabs.com/puppetlabs/firewall).
+Once you have a repo setup all you have to do is include networker in your
+manifest somewhere. You can, optionally, set the servers that are allowd to
+access the client via a parameter or via [the file backend to hiera][hiera-file].
 
 ## Usage
 
-Put the classes, types, and resources for customizing, configuring, and doing
-the fancy stuff with your module here.
+Basic usage:
+```puppet
+include networker
+```
 
-## Reference
+Set the servers allowed to access the client:
+```puppet
+class { 'networker':
+  ensure_setting => 'present',
+  servers        => ['server1.example.com', 'server2.example.com'],
+}
+```
 
-Here, list the classes, types, providers, facts, etc contained in your module.
-This section should include all of the under-the-hood workings of your module so
-people know what the module is touching on their system but don't need to mess
-with things. (We are working on automating this section!)
+Pull the file representing `/nsr/res/servers` from hiera:
+```puppet
+class { 'networker':
+  ensure_setting => 'present',
+  servers_file   => 'hiera',
+}
+```
+
+## Parameters
+
+##### `ensure_setting`  
+Passed directly to ensure of package resource  
+Type: String  
+Default: `'present'`  
+
+##### `servers`  
+The servers that should be entered into `/nsr/res/servers`  
+Type: array  
+Default: `[]`  
+
+##### `servers_file`  
+Determines where the content for the servers file comes from. Valid values are
+`'template'` and `'hiera'`.  
+* `template`: takes the array passed to $servers and uses it to construct
+  `/nsr/res/servers`.
+* `hiera`: takes advantage of the file backend for hiera and looks for the
+  specified file there (see `servers_file_name`).  
+
+Type: String  
+Default: `'template'`  
+
+##### `servers_file_name`  
+The name of the file in hiera that contains the desired contents of
+`/nsr/res/servers`  
+Type: String  
+Default: `'networker_servers'`  
 
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+This should work on the `RedHat` and `Debian` families of OS's. Additional
+support is welcomed, just submit an issue with the details.
 
 ## Development
 
-Since your module is awesome, other users will want to play with it. Let them
-know what the ground rules for contributing are.
+Pull requests are welcomed!
 
-## Release Notes/Contributors/Etc **Optional**
+## License
 
-If you aren't using changelog, put your release notes here (though you should
-consider using changelog). You may also add any additional sections you feel are
-necessary or important to include here. Please use the `## ` header.
+This is released under the New BSD / BSD 3 Clause license. A copy of the license
+can be found in the root of the module.
+
+[gh-tag-img]: https://img.shields.io/github/tag/genebean/genebean-networker.svg
+[gh-link]: https://github.com/genebean/genebean-networker
+[hiera-file]: https://github.com/adrienthebo/hiera-file
+[pf-img]: https://img.shields.io/puppetforge/v/genebean/networker.svg
+[pf-link]: https://forge.puppetlabs.com/genebean/networker
+[travis-ci]: https://travis-ci.org/genebean/genebean-networker
+[travis-img-master]: https://img.shields.io/travis/genebean/genebean-networker/master.svg
