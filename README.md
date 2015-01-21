@@ -1,3 +1,4 @@
+[![Build Status][travis-img-master]][travis-ci]
 [![Puppet Forge][pf-img]][pf-link]
 [![GitHub tag][gh-tag-img]][gh-link]
 
@@ -110,3 +111,5 @@ can be found in the root of the module.
 [hiera-file]: https://github.com/adrienthebo/hiera-file
 [pf-img]: https://img.shields.io/puppetforge/v/genebean/networker.svg
 [pf-link]: https://forge.puppetlabs.com/genebean/networker
+[travis-ci]: https://travis-ci.org/genebean/genebean-networker
+[travis-img-master]: https://img.shields.io/travis/genebean/genebean-networker/master.svg
