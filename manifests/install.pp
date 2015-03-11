@@ -16,4 +16,12 @@ class networker::install (
     }
 
   } # end case
+
+  exec { 'create_nsr':
+    command   => 'nsrexecd && pkill nsrexecd',
+    path      => '/usr/bin:/usr/sbin',
+    unless    => 'test -e /nsr/res/servers',
+    creates   => '/nsr/res/servers'
+  }
+
 }
