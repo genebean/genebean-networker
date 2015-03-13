@@ -4,8 +4,18 @@ class networker::config (
   $servers_file      = $::networker::params::servers_file,
   $servers_file_name = $::networker::params::servers_file_name,
 ) inherits ::networker::params {
+  file { '/nsr':
+    ensure => 'directory',
+    before => File['/nsr/res'],
+  }
+
+  file { '/nsr/res':
+    ensure => 'directory',
+    before => File['/nsr/res/servers'],
+  }
+
   case $servers_file {
-    hiera: {
+    hiera    : {
       file { '/nsr/res/servers':
         ensure  => 'present',
         content => hiera($servers_file_name),
@@ -14,7 +24,7 @@ class networker::config (
       }
     }
 
-    template: {
+    template : {
       file { '/nsr/res/servers':
         ensure  => 'present',
         content => template('networker/servers.erb'),
@@ -23,7 +33,7 @@ class networker::config (
       }
     }
 
-    default: {
+    default  : {
       fail("Valid options for 'servers_file' are 'hiera' and 'template'.")
     }
   }
