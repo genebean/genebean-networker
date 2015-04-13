@@ -4,7 +4,7 @@
   "author": "Gene Liverman",
   "summary": "Installs and configures the EMC NetWorker backup client",
   "license": "BSD-3-Clause",
-  "source": "https://github.com:genebean/genebean-networker.git",
+  "source": "https://github.com/genebean/genebean-networker.git",
   "project_page": "https://github.com/genebean/genebean-networker",
   "issues_url": "https://github.com/genebean/genebean-networker/issues",
   "tags": ["networker", "emc", "backup"],
@@ -20,4 +20,3 @@
     { "operatingsystem": "RedHat", "operatingsystemrelease": [ "5", "6", "7" ] }
   ]
 }
-

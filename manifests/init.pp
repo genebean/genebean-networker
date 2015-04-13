@@ -43,25 +43,31 @@
 #
 #
 class networker (
-  $ensure_setting    = $::networker::params::ensure_setting,
-  $servers           = $::networker::params::servers,
-  $servers_file      = $::networker::params::servers_file,
-  $servers_file_name = $::networker::params::servers_file_name,
+  $ensure_setting       = $::networker::params::ensure_setting,
+  $servers              = $::networker::params::servers,
+  $servers_file         = $::networker::params::servers_file,
+  $servers_file_name    = $::networker::params::servers_file_name,
+  $service_portrange    = $::networker::params::service_portrange,
+  $connection_portrange = $::networker::params::connection_portrange,
 ) inherits ::networker::params {
   # validate parameters
   validate_string($ensure_setting)
   validate_string($servers_file)
   validate_array($servers)
+  validate_string($service_portrange)
+  validate_string($connection_portrange)
 
   class { 'networker::install':
     ensure_setting => $ensure_setting,
-  } ->
+  }
 
   class { 'networker::config':
-    servers           => $servers,
-    servers_file      => $servers_file,
-    servers_file_name => $servers_file_name,
-  } ->
+    servers              => $servers,
+    servers_file         => $servers_file,
+    servers_file_name    => $servers_file_name,
+    service_portrange    => $service_portrange,
+    connection_portrange => $connection_portrange,
+  }
 
   class { 'networker::service': }
 
