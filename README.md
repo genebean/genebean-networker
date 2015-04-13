@@ -65,17 +65,17 @@ class { 'networker':
 
 ## Parameters
 
-##### `ensure_setting`  
+#### `ensure_setting`  
 Passed directly to ensure of package resource  
 Type: String  
 Default: `'present'`  
 
-##### `servers`  
+#### `servers`  
 The servers that should be entered into `/nsr/res/servers`  
 Type: array  
 Default: `[]`  
 
-##### `servers_file`  
+#### `servers_file`  
 Determines where the content for the servers file comes from. Valid values are
 `'template'` and `'hiera'`.  
 * `template`: takes the array passed to $servers and uses it to construct
@@ -86,11 +86,82 @@ Determines where the content for the servers file comes from. Valid values are
 Type: String  
 Default: `'template'`  
 
-##### `servers_file_name`  
+#### `servers_file_name`  
 The name of the file in hiera that contains the desired contents of
 `/nsr/res/servers`  
 Type: String  
 Default: `'networker_servers'`  
+
+#### `service_portrange`
+Sets the system's service ports to the ranges specified.
+Type: String  
+Default: `7937-9936`
+
+#### `connection_portrange`
+Sets the system's connection ports to the ranges specified.
+Type: String  
+Default: `0-0`
+
+### Package Installation
+#### `client`
+Installs the Networker client packages "lgtoclnt", "lgtoman"
+Default: `true`
+Hiera parameter: `networker::install::client`
+
+#### `storagenode`
+Installs the Networker storagenode package "lgtonode"
+Default: `false`
+Hiera parameter: `networker::install::storagenode`
+
+#### `server`
+Installs the Networker server package "lgtoserv"
+Default: `false`
+Hiera parameter: `networker::install::server`
+
+#### `console`
+Installs the Networker console package "lgtonmc"
+Default: `false`
+Hiera parameter: `networker::install::console`
+
+#### `sap`
+Installs the Networker Module for SAP package "lgtonmsap"
+Default: `false`
+Hiera parameter: `networker::install::sap`
+
+#### `nmda`
+Installs the Networker Module for Databases and Applications package "lgtonmda"
+Default: `false`
+Hiera parameter: `networker::install::nmda`
+
+#### `version_client`
+Sets the version of the client to install.
+Default: `8.2.0.1-1`
+Hiera parameter: `networker::install::version_client`
+
+#### `version_storagenode`
+Sets the version of the storagenode to install.
+Default: `8.1.1.4-1`
+Hiera parameter: `networker::install::version_storagenode`
+
+#### `version_server`
+Sets the version of the server to install.
+Default: `8.1.1.4-1`
+Hiera parameter: `networker::install::version_server`
+
+#### `version_console`
+Sets the version of the console to install.
+Default: `8.1.1.4-1`
+Hiera parameter: `networker::install::version_console`
+
+#### `version_sap`
+Sets the version of the sap module to install.
+Default: `4.6.0.2-1`
+Hiera parameter: `networker::install::version_sap`
+
+#### `version_nmda`
+Sets the version of the nmda module to install.
+Default: `8.2.0.1-1-1`
+Hiera parameter: `networker::install::version_nmda`
 
 ## Limitations
 
