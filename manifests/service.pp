@@ -4,6 +4,7 @@ class networker::service {
     ensure     => 'running',
     enable     => true,
     hasrestart => false,
+    provider   => 'redhat',
     require    => File['/nsr/res/servers'],
   }
 }
