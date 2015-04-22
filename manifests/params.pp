@@ -20,13 +20,12 @@ class networker::params {
   $package_client       = [ 'lgtoclnt', 'lgtoman' ]
   $package_sap          = 'lgtonmsap'
   $package_nmda         = 'lgtonmda'
-  
-  $version_client      = '8.2.0.1-1'
-  $version_server      = '8.1.1.4-1'
-  $version_console     = '8.1.1.4-1'
-  $version_storagenode = '8.1.1.4-1'
-  $version_sap         = '4.6.0.2-1'
-  $version_nmda        = '8.2.0.1-1'
 
+  $version_client      = present
+  $version_server      = present
+  $version_console     = present
+  $version_storagenode = present
+  $version_sap         = present
+  $version_nmda        = present
 
 }

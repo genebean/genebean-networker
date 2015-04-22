@@ -59,7 +59,7 @@ class networker (
 
   class { 'networker::install':
     ensure_setting => $ensure_setting,
-  } ->
+  } 
 
   class { 'networker::config':
     servers              => $servers,
@@ -67,7 +67,7 @@ class networker (
     servers_file_name    => $servers_file_name,
     service_portrange    => $service_portrange,
     connection_portrange => $connection_portrange,
-  } ->
+  } 
 
   class { 'networker::service': }
 

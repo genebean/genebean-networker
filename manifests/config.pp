@@ -4,8 +4,8 @@ class networker::config (
   $servers_file         = $::networker::params::servers_file,
   $servers_file_name    = $::networker::params::servers_file_name,
   $service_portrange    = $::networker::params::service_portrange,
-  $connection_portrange = $::networker::params::connection_portrange,
-) inherits ::networker::params {
+  $connection_portrange = $::networker::params::connection_portrange,) inherits
+::networker::params {
   file { '/nsr':
     ensure => 'directory',
     before => File['/nsr/res'],
@@ -41,16 +41,27 @@ class networker::config (
   }
 
   # Set Portranges
-  if $::nsr_serviceports != $service_portrange {
-    exec { 'set_nsr_serviceports':
-      command => "/usr/bin/nsrports -S ${service_portrange}",
-      notify  => Service['networker'],
+  case $::kernel {
+    Linux   : {
+#      if $::nsr_serviceports == "nsrexecd not running" {
+#      }
+      if $::nsr_serviceports != $service_portrange {
+        exec { 'set_nsr_serviceports':
+          command => "/usr/bin/nsrports -S ${service_portrange}",
+          require  => Service['networker'],
+        }
+      } 
+
+      if $::nsr_connectionports != $connection_portrange {
+        exec { 'set_nsr_connectionports':
+          command => "/usr/bin/nsrports -C ${connection_portrange}",
+          require  => Service['networker'],
+        }
+      }
+    } # end Linux
+
+    default : {
     }
-  }
-  if $::nsr_connectionports != $connection_portrange {
-    exec { 'set_nsr_connectionports':
-      command => "/usr/bin/nsrports -C ${connection_portrange}",
-      notify  => Service['networker'],
-    }
-  }
+
+  } # end case $::kernel
 }
