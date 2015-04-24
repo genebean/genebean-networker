@@ -6,28 +6,7 @@
 #
 # === Parameters
 #
-#   $ensure_setting     Passed directly to ensure of package resource
-#                       Type: String
-#                       Default: 'present'
-#
-#   $servers            The servers that should be entered into /nsr/res/servers
-#                       Type: array
-#                       Default: []
-#
-#   $servers_file       Determines where the content for the servers file comes
-#                       from. Valid values are 'template' and 'hiera'.
-#                       *template*: takes the array passed to $servers and uses
-#                       it to construct /nsr/res/servers.
-#                       *hiera*: takes advantage of the file backend for hiera
-#                       and looks for the specified file there
-#                       (see $servers_file_name).
-#                       Type: String
-#                       Default: 'template'
-#
-#   $servers_file_name  The name of the file in hiera that contains the
-#                       desired contents of /nsr/res/servers
-#                       Type: String
-#                       Default: 'networker_servers'
+#   See README.md for parameter info.
 #
 # === Examples
 #
@@ -41,35 +20,46 @@
 #    servers_file   => 'hiera',
 #  }
 #
-#
 class networker (
-  $ensure_setting       = $::networker::params::ensure_setting,
+  $connection_portrange = $::networker::params::connection_portrange,
+  $install_client       = $::networker::params::install_client,
+  $install_console      = $::networker::params::install_console,
+  $install_nmda         = $::networker::params::install_nmda,
+  $install_sap          = $::networker::params::install_sap,
+  $install_server       = $::networker::params::install_server,
+  $install_storagenode  = $::networker::params::install_storagenode,
+  $package_client       = $::networker::params::package_client,
+  $package_console      = $::networker::params::package_console,
+  $package_nmda         = $::networker::params::package_nmda,
+  $package_sap          = $::networker::params::package_sap,
+  $package_server       = $::networker::params::package_server,
+  $package_storagenode  = $::networker::params::package_storagenode,
   $servers              = $::networker::params::servers,
   $servers_file         = $::networker::params::servers_file,
   $servers_file_name    = $::networker::params::servers_file_name,
   $service_portrange    = $::networker::params::service_portrange,
-  $connection_portrange = $::networker::params::connection_portrange,
-) inherits ::networker::params {
+  $version_client       = $::networker::params::version_client,
+  $version_console      = $::networker::params::version_console,
+  $version_nmda         = $::networker::params::version_nmda,
+  $version_sap          = $::networker::params::version_sap,
+  $version_server       = $::networker::params::version_server,
+  $version_storagenode  = $::networker::params::version_storagenode,) inherits
+::networker::params {
   # validate parameters
-  validate_string($ensure_setting)
   validate_string($servers_file)
   validate_array($servers)
   validate_string($service_portrange)
   validate_string($connection_portrange)
 
-  class { 'networker::install':
-    ensure_setting => $ensure_setting,
+  anchor { '::networker::start':
+  } ->
+  class { '::networker::install':
+  } ->
+  class { '::networker::config':
+  } ->
+  class { '::networker::service':
+  } ->
+  anchor { '::networker::end':
   }
-
-  class { 'networker::config':
-    servers              => $servers,
-    servers_file         => $servers_file,
-    servers_file_name    => $servers_file_name,
-    service_portrange    => $service_portrange,
-    connection_portrange => $connection_portrange,
-  }
-
-  class { 'networker::service': }
-
 
 } # end networker
