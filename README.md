@@ -16,9 +16,9 @@
 
 ## Overview
 
-This module installs the EMC NetWorker backup client. It is assumed that
-the installation packages are available via a repository the client has
-access to.
+This module installs the EMC NetWorker backup client and/or server.
+It is assumed that the installation packages are available via a repository
+the client has access to.  It also manages the `servers` file.
 
 
 ## Setup
@@ -50,32 +50,95 @@ include networker
 Set the servers allowed to access the client:
 ```puppet
 class { 'networker':
-  ensure_setting => 'present',
-  servers        => ['server1.example.com', 'server2.example.com'],
+  servers => ['server1.example.com', 'server2.example.com'],
 }
 ```
 
 Pull the file representing `/nsr/res/servers` from hiera:
 ```puppet
 class { 'networker':
-  ensure_setting => 'present',
   servers_file   => 'hiera',
 }
 ```
 
 ## Parameters
 
-##### `ensure_setting`  
-Passed directly to ensure of package resource  
-Type: String  
-Default: `'present'`  
+### Package Installation
 
-##### `servers`  
+#### `install_client`  
+Installs the Networker client packages "lgtoclnt", "lgtoman"  
+Default: `true`  
+Hiera parameter: `networker::install::install_client`
+
+#### `install_console`  
+Installs the Networker console package "lgtonmc"  
+Default: `false`  
+Hiera parameter: `networker::install::install_console``
+
+#### `install_nmda`  
+Installs the Networker Module for Databases and Applications package "lgtonmda"  
+Default: `false`  
+Hiera parameter: `networker::install::install_nmda`
+
+#### `install_sap`  
+Installs the Networker Module for SAP package "lgtonmsap"  
+Default: `false`  
+Hiera parameter: `networker::install::install_sap`
+
+#### `install_server`  
+Installs the Networker server package "lgtoserv"  
+Default: `false`  
+Hiera parameter: `networker::install::install_server`
+
+#### `install_storagenode`  
+Installs the Networker storagenode package "lgtonode"  
+Default: `false`  
+Hiera parameter: `networker::install::install_storagenode`
+
+#### `version_client`  
+Sets the version of the client to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_client`
+
+#### `version_console`  
+Sets the version of the console to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_console`
+
+#### `version_nmda`  
+Sets the version of the nmda module to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_nmda`
+
+#### `version_sap`  
+Sets the version of the sap module to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_sap`
+
+#### `version_server`  
+Sets the version of the server to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_server`
+
+#### `version_storagenode`  
+Sets the version of the storagenode to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_storagenode`
+
+
+### Config Settings
+
+#### `connection_portrange`  
+Sets the system's connection ports to the ranges specified.  
+Type: String  
+Default: `0-0`
+
+#### `servers`  
 The servers that should be entered into `/nsr/res/servers`  
 Type: array  
 Default: `[]`  
 
-##### `servers_file`  
+#### `servers_file`  
 Determines where the content for the servers file comes from. Valid values are
 `'template'` and `'hiera'`.  
 * `template`: takes the array passed to $servers and uses it to construct
@@ -86,20 +149,29 @@ Determines where the content for the servers file comes from. Valid values are
 Type: String  
 Default: `'template'`  
 
-##### `servers_file_name`  
+#### `servers_file_name`  
 The name of the file in hiera that contains the desired contents of
 `/nsr/res/servers`  
 Type: String  
 Default: `'networker_servers'`  
 
+#### `service_portrange`  
+Sets the system's service ports to the ranges specified.  
+Type: String  
+Default: `7937-9936`
+
+
 ## Limitations
 
 This should work on the `RedHat` and `Debian` families of OS's. Additional
-support is welcomed, just submit an issue with the details.
+support is welcomed, just submit an issue with the details.  Support for
+Windows is planned for a future release.
 
 ## Development
 
-Pull requests are welcomed!
+Pull requests are welcomed!  Many thanks to [Sebastian Ickler][dev-icklers]
+for adding features beyond the client setup to this module. If you add any code
+please try to make sure it will only be executed on OS's that support it.
 
 ## License
 
@@ -113,3 +185,5 @@ can be found in the root of the module.
 [pf-link]: https://forge.puppetlabs.com/genebean/networker
 [travis-ci]: https://travis-ci.org/genebean/genebean-networker
 [travis-img-master]: https://img.shields.io/travis/genebean/genebean-networker/master.svg
+
+[dev-icklers]: https://github.com/icklers
