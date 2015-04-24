@@ -1,9 +1,10 @@
 [![GitHub tag][gh-tag-img]][gh-link]
-## 2015-04-13 - Sebastian Ickler
-- Added functions and parameters:
-- Single package install possible for server, storagenode etc.
-- Define service ports
-- Define connection ports 
+
+## 2015-04-23 Release 1.1.0  
+- Alphabetized many things
+- Added code to make this only run on Linux for now
+- Server components can now be installed too
+- Custom facts added for service ports and connection ports
 
 ## 2015-01-21 Release 1.0.0  
 - Initial release
