@@ -16,9 +16,9 @@
 
 ## Overview
 
-This module installs the EMC NetWorker backup client. It is assumed that
-the installation packages are available via a repository the client has
-access to.
+This module installs the EMC NetWorker backup client and/or server.
+It is assumed that the installation packages are available via a repository
+the client has access to.  It also manages the `servers` file.
 
 
 ## Setup
@@ -54,15 +54,13 @@ include networker
 Set the servers allowed to access the client:
 ```puppet
 class { 'networker':
-  ensure_setting => 'present',
-  servers        => ['server1.example.com', 'server2.example.com'],
+  servers => ['server1.example.com', 'server2.example.com'],
 }
 ```
 
 Pull the file representing `/nsr/res/servers` from hiera:
 ```puppet
 class { 'networker':
-  ensure_setting => 'present',
   servers_file   => 'hiera',
 }
 ```
@@ -97,10 +95,75 @@ Type: string
 Default: `true`
 Hiera parameter: `networker::install`
 
-#### `ensure_setting`  
-Passed directly to ensure of package resource  
+### Package Installation
+
+#### `install_client`  
+Installs the Networker client packages "lgtoclnt", "lgtoman"  
+Default: `true`  
+Hiera parameter: `networker::install::install_client`
+
+#### `install_console`  
+Installs the Networker console package "lgtonmc"  
+Default: `false`  
+Hiera parameter: `networker::install::install_console``
+
+#### `install_nmda`  
+Installs the Networker Module for Databases and Applications package "lgtonmda"  
+Default: `false`  
+Hiera parameter: `networker::install::install_nmda`
+
+#### `install_sap`  
+Installs the Networker Module for SAP package "lgtonmsap"  
+Default: `false`  
+Hiera parameter: `networker::install::install_sap`
+
+#### `install_server`  
+Installs the Networker server package "lgtoserv"  
+Default: `false`  
+Hiera parameter: `networker::install::install_server`
+
+#### `install_storagenode`  
+Installs the Networker storagenode package "lgtonode"  
+Default: `false`  
+Hiera parameter: `networker::install::install_storagenode`
+
+#### `version_client`  
+Sets the version of the client to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_client`
+
+#### `version_console`  
+Sets the version of the console to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_console`
+
+#### `version_nmda`  
+Sets the version of the nmda module to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_nmda`
+
+#### `version_sap`  
+Sets the version of the sap module to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_sap`
+
+#### `version_server`  
+Sets the version of the server to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_server`
+
+#### `version_storagenode`  
+Sets the version of the storagenode to install.  
+Default: `present`  
+Hiera parameter: `networker::install::version_storagenode`
+
+
+### Config Settings
+
+#### `connection_portrange`  
+Sets the system's connection ports to the ranges specified.
 Type: String  
-Default: `'present'`  
+Default: `0-0`
 
 #### `servers`  
 The servers that should be entered into `/nsr/res/servers`  
@@ -157,83 +220,93 @@ Default: `0-0`
 Installs the Networker client packages "lgtoclnt", "lgtoman"
 Type: Boolean
 Default: `true`
-Hiera parameter: `networker::install::client`
+Hiera parameter: `networker::install_client`
 
 #### `storagenode`
 Installs the Networker storagenode package "lgtonode"
 Type: Boolean
 Default: `false`
-Hiera parameter: `networker::install::storagenode`
+Hiera parameter: `networker::install_storagenode`
 
 #### `server`
 Installs the Networker server package "lgtoserv"
 Type: Boolean
 Default: `false`
-Hiera parameter: `networker::install::server`
+Hiera parameter: `networker::install_server`
 
 #### `console`
 Installs the Networker console package "lgtonmc"
 Type: Boolean
 Default: `false`
-Hiera parameter: `networker::install::console`
+Hiera parameter: `networker::install_console`
 
 #### `sap`
 Installs the Networker Module for SAP package "lgtonmsap"
 Type: Boolean
 Default: `false`
-Hiera parameter: `networker::install::sap`
+Hiera parameter: `networker::install_sap`
 
 #### `nmda`
 Installs the Networker Module for Databases and Applications package "lgtonmda"
 Type: Boolean
 Default: `false`
-Hiera parameter: `networker::install::nmda`
+Hiera parameter: `networker::install_nmda`
 
 #### `version_client`
 Sets the version of the client to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_client`
+Hiera parameter: `networker::version_client`
 
 #### `version_storagenode`
 Sets the version of the storagenode to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_storagenode`
+Hiera parameter: `networker::version_storagenode`
 
 #### `version_server`
 Sets the version of the server to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_server`
+Hiera parameter: `networker::version_server`
 
 #### `version_console`
 Sets the version of the console to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_console`
+Hiera parameter: `networker::version_console`
 
 #### `version_sap`
 Sets the version of the sap module to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_sap`
+Hiera parameter: `networker::version_sap`
 
 #### `version_nmda`
 Sets the version of the nmda module to install.
 Type: String
 Default: `'present'`
-Hiera parameter: `networker::install::version_nmda`
+Hiera parameter: `networker::version_nmda`
+
+#### `service_portrange`  
+Sets the system's service ports to the ranges specified.  
+Type: String  
+Default: `7937-9936`
+
+
 
 ## Limitations
 
 This should work on the `RedHat` and `Debian` families of OS's. Additional
-support is welcomed, just submit an issue with the details.
+support is welcome, just submit an issue with the details.  Support for
+Windows is planned for a future release, same is for AIX.
 
 ## Development
 
 Pull requests are welcomed!  Many thanks to [Sebastian Ickler][dev-icklers]
-for adding features beyond the client setup to this module.
+for adding features beyond the client setup to this module. If you add any code
+please try to make sure it will only be executed on OS's that support it.
+
 
 ## License
 

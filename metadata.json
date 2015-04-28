@@ -1,8 +1,8 @@
 {
   "name": "genebean-networker",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "author": "Gene Liverman",
-  "summary": "Installs and configures the EMC NetWorker backup client",
+  "summary": "Installs and configures the EMC NetWorker",
   "license": "BSD-3-Clause",
   "source": "https://github.com/genebean/genebean-networker.git",
   "project_page": "https://github.com/genebean/genebean-networker",
