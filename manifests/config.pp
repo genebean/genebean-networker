@@ -1,10 +1,11 @@
 # Configures the NetWorker client
 class networker::config (
-  $servers              = $::networker::params::servers,
-  $servers_file         = $::networker::params::servers_file,
-  $servers_file_name    = $::networker::params::servers_file_name,
-  $service_portrange    = $::networker::params::service_portrange,
-  $connection_portrange = $::networker::params::connection_portrange,) inherits
+  $servers              = $::networker::servers,
+  $servers_file         = $::networker::servers_file,
+  $servers_file_ensure  = $::networker::servers_file_ensure,
+  $servers_file_name    = $::networker::servers_file_name,
+  $service_portrange    = $::networker::service_portrange,
+  $connection_portrange = $::networker::connection_portrange,) inherits
 ::networker::params {
   file { '/nsr':
     ensure => 'directory',
@@ -15,20 +16,19 @@ class networker::config (
     ensure => 'directory',
     before => File['/nsr/res/servers'],
   }
-
   case $servers_file {
-    hiera    : {
+    "hiera"    : {
       file { '/nsr/res/servers':
-        ensure  => 'present',
+        ensure  => $servers_file_ensure,
         content => hiera($servers_file_name),
         require => Package['lgtoclnt'],
         notify  => Service['networker'],
       }
     }
 
-    template : {
+    "template" : {
       file { '/nsr/res/servers':
-        ensure  => 'present',
+        ensure  => $servers_file_ensure,
         content => template('networker/servers.erb'),
         require => Package['lgtoclnt'],
         notify  => Service['networker'],
@@ -36,25 +36,22 @@ class networker::config (
     }
 
     default  : {
-      fail("Valid options for 'servers_file' are 'hiera' and 'template'.")
+      fail("Valid options for 'servers_file' are 'hiera' and'template'.")
     }
   }
 
   # Set Portranges
   case $::kernel {
     Linux   : {
-#      if $::nsr_serviceports == "nsrexecd not running" {
-#      }
       if $::nsr_serviceports != $service_portrange {
         exec { 'set_nsr_serviceports':
-          command   => "/usr/bin/nsrports -S ${service_portrange}",
+          command   => "/usr/bin/nsrports -S ${::networker::params::service_portrange}",
           subscribe => Service['networker'],
         }
       }
-
       if $::nsr_connectionports != $connection_portrange {
         exec { 'set_nsr_connectionports':
-          command   => "/usr/bin/nsrports -C ${connection_portrange}",
+          command   => "/usr/bin/nsrports -C ${::networker::params::connection_portrange}",
           subscribe => Service['networker'],
         }
       }

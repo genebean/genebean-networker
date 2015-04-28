@@ -1,8 +1,11 @@
 # Configures the NetWorker service
-class networker::service {
+class networker::service (
+    $ensure    = $::networker::service,
+    $enable    = $::networker::service_enable,
+) inherits ::networker::params {
   service { 'networker':
-    ensure     => 'running',
-    enable     => true,
+    ensure     => $ensure,
+    enable     => $enable,
     hasrestart => false,
     provider   => 'redhat',
     require    => File['/nsr/res/servers'],

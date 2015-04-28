@@ -43,33 +43,43 @@
 #
 #
 class networker (
-  $ensure_setting       = $::networker::params::ensure_setting,
-  $servers              = $::networker::params::servers,
-  $servers_file         = $::networker::params::servers_file,
-  $servers_file_name    = $::networker::params::servers_file_name,
-  $service_portrange    = $::networker::params::service_portrange,
-  $connection_portrange = $::networker::params::connection_portrange,
+  $ensure_setting       = $::networker::ensure_setting,
+  $servers              = $::networker::servers,
+  $service              = $::networker::service,
+  $service_enable       = $::networker::service_enable,
+  $servers_file         = $::networker::servers_file,
+  $servers_file_name    = $::networker::servers_file_name,
+  $servers_file_ensure  = $::networker::servers_file_ensure,
+  $service_portrange    = $::networker::service_portrange,
+  $connection_portrange = $::networker::connection_portrange,
+  $install              = $::networker::install,
 ) inherits ::networker::params {
-  # validate parameters
-  validate_string($ensure_setting)
-  validate_string($servers_file)
-  validate_array($servers)
-  validate_string($service_portrange)
-  validate_string($connection_portrange)
 
-  class { 'networker::install':
-    ensure_setting => $ensure_setting,
+  if $install {
+
+    # validate parameters
+    validate_string($ensure_setting)
+    validate_string($servers_file)
+    validate_array($servers)
+    validate_string($service_portrange)
+    validate_string($connection_portrange)
+
+    class { 'networker::install':
+      ensure_setting => $ensure_setting,
+    }
+  
+    class { 'networker::config':
+      servers              => $servers,
+      servers_file         => $servers_file,
+      servers_file_name    => $servers_file_name,
+      servers_file_ensure  => $servers_file_ensure,
+      service_portrange    => $service_portrange,
+      connection_portrange => $connection_portrange,
+    }
+  
+    class { 'networker::service':
+    }
+
   }
-
-  class { 'networker::config':
-    servers              => $servers,
-    servers_file         => $servers_file,
-    servers_file_name    => $servers_file_name,
-    service_portrange    => $service_portrange,
-    connection_portrange => $connection_portrange,
-  }
-
-  class { 'networker::service': }
-
-
+  
 } # end networker

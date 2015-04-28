@@ -1,24 +1,24 @@
 # Installs NetWorker from a repository
 class networker::install (
   $ensure_setting      = $::networker::ensure_setting,
-  $client              = $::networker::params::client,
-  $storagenode         = $::networker::params::storagenode,
-  $nmda                = $::networker::params::nmda,
-  $sap                 = $::networker::params::sap,
-  $server              = $::networker::params::server,
-  $console             = $::networker::params::console,
-  $package_client      = $::networker::params::package_client,
-  $package_server      = $::networker::params::package_server,
-  $package_console     = $::networker::params::package_console,
-  $package_storagenode = $::networker::params::package_storagenode,
-  $package_sap         = $::networker::params::package_sap,
-  $package_nmda        = $::networker::params::package_nmda,
-  $version_client      = $::networker::params::version_client,
-  $version_server      = $::networker::params::version_server,
-  $version_console     = $::networker::params::version_console,
-  $version_storagenode = $::networker::params::version_storagenode,
-  $version_sap         = $::networker::params::version_sap,
-  $version_nmda        = $::networker::params::version_nmda,) inherits
+  $client              = $::networker::client,
+  $storagenode         = $::networker::storagenode,
+  $nmda                = $::networker::nmda,
+  $sap                 = $::networker::sap,
+  $server              = $::networker::server,
+  $console             = $::networker::console,
+  $package_client      = $::networker::package_client,
+  $package_server      = $::networker::package_server,
+  $package_console     = $::networker::package_console,
+  $package_storagenode = $::networker::package_storagenode,
+  $package_sap         = $::networker::package_sap,
+  $package_nmda        = $::networker::package_nmda,
+  $version_client      = $::networker::version_client,
+  $version_server      = $::networker::version_server,
+  $version_console     = $::networker::version_console,
+  $version_storagenode = $::networker::version_storagenode,
+  $version_sap         = $::networker::version_sap,
+  $version_nmda        = $::networker::version_nmda,) inherits
 ::networker::params {
   case $::osfamily {
     RedHat, Debian : {

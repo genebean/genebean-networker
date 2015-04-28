@@ -3,7 +3,10 @@ class networker::params {
   $ensure_setting       = 'present'
   $servers              = []
   $servers_file         = 'template'
+  $servers_file_ensure  = 'present'
   $servers_file_name    = 'networker_servers'
+  $service              = 'running'
+  $service_enable       = true
   $service_portrange    = '7937-9936'
   $connection_portrange = '0-0'
 

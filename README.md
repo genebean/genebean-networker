@@ -26,6 +26,10 @@ access to.
 ### What networker affects
 
 * the `lgtoclnt` and `lgtoman` packages
+* the `lgtonmc` management console package
+* the `lgtonode` storage node package
+* the `lgtonmsap` SAP backup module package
+* the `lgtonmda` Database backup module package
 * the content in `/nsr/res/servers`
 * the service `networker`
 
@@ -63,7 +67,35 @@ class { 'networker':
 }
 ```
 
+If you like to set up your configuration with hiera:
+Set the networker backup servers:
+```yaml
+networker::servers:
+  - backup01
+  - backup01.mydomain
+  - backup02
+  - backup02.myotherdomain
+```
+
+To install the networker server, add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install::server: true
+```
+
+If you don't want the /nsr/res/servers file, set this parameter:
+```yaml
+networker::servers_file_ensure: 'absent'
+```
+
 ## Parameters
+
+#### `install`
+Install networker.
+Added to fit the requirements of a big multi-site environment with different backup solutions.
+If you don't need/want to install EMC Networker on some nodes, set this to `false`
+Type: string
+Default: `true`
+Hiera parameter: `networker::install`
 
 #### `ensure_setting`  
 Passed directly to ensure of package resource  
@@ -92,6 +124,24 @@ The name of the file in hiera that contains the desired contents of
 Type: String  
 Default: `'networker_servers'`  
 
+#### `servers_file_ensure`  
+For the networker server it may be necessary not to deploy the `/nsr/res/servers` file.
+Type: String
+Default: `'present'`
+Hiera parameter: `networker::servers_file_ensure`
+
+#### `service`
+The status of the service
+Type: String
+Default: `'running'`
+Hiera parameter: `networker::service`
+
+#### `service_enable`
+Autostart the networker service on boot
+Type: Boolean
+Default: `true`
+Hiera parameter: `networker::service_enable`
+
 #### `service_portrange`
 Sets the system's service ports to the ranges specified.
 Type: String  
@@ -105,62 +155,74 @@ Default: `0-0`
 ### Package Installation
 #### `client`
 Installs the Networker client packages "lgtoclnt", "lgtoman"
+Type: Boolean
 Default: `true`
 Hiera parameter: `networker::install::client`
 
 #### `storagenode`
 Installs the Networker storagenode package "lgtonode"
+Type: Boolean
 Default: `false`
 Hiera parameter: `networker::install::storagenode`
 
 #### `server`
 Installs the Networker server package "lgtoserv"
+Type: Boolean
 Default: `false`
 Hiera parameter: `networker::install::server`
 
 #### `console`
 Installs the Networker console package "lgtonmc"
+Type: Boolean
 Default: `false`
 Hiera parameter: `networker::install::console`
 
 #### `sap`
 Installs the Networker Module for SAP package "lgtonmsap"
+Type: Boolean
 Default: `false`
 Hiera parameter: `networker::install::sap`
 
 #### `nmda`
 Installs the Networker Module for Databases and Applications package "lgtonmda"
+Type: Boolean
 Default: `false`
 Hiera parameter: `networker::install::nmda`
 
 #### `version_client`
 Sets the version of the client to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_client`
 
 #### `version_storagenode`
 Sets the version of the storagenode to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_storagenode`
 
 #### `version_server`
 Sets the version of the server to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_server`
 
 #### `version_console`
 Sets the version of the console to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_console`
 
 #### `version_sap`
 Sets the version of the sap module to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_sap`
 
 #### `version_nmda`
 Sets the version of the nmda module to install.
-Default: `present`
+Type: String
+Default: `'present'`
 Hiera parameter: `networker::install::version_nmda`
 
 ## Limitations
