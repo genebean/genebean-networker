@@ -77,7 +77,7 @@ networker::servers:
 
 To install the networker server, add the following to your hiera (node/profile) configuration:
 ```yaml
-networker::install::server: true
+networker::install_server: true
 ```
 
 If you don't want the /nsr/res/servers file, set this parameter:
