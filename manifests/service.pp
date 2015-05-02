@@ -4,7 +4,7 @@ class networker::service (
     $service_enable    = $::networker::service_enable,
 ) inherits ::networker::params {
 
-  if ($::networker::install_client) or ($::networker::install_server) or ($::networker::install_server) {
+  if ($::networker::install_client) or ($::networker::install_server) or ($::networker::install_storagenode) {
     case $::osfamily {
       RedHat, Debian : {
         service { 'networker':

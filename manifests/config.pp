@@ -7,7 +7,7 @@ class networker::config (
   $servers_file_name    = $::networker::servers_file_name,
   $service_portrange    = $::networker::service_portrange,) {
   
-  if ($::networker::install_client) or ($::networker::install_server) or ($::networker::install_server) {
+  if ($::networker::install_client) or ($::networker::install_server) or ($::networker::install_storagenode) {
     case $::osfamily {
       RedHat, Debian : {
         file { '/nsr':
