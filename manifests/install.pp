@@ -1,5 +1,6 @@
 # Installs NetWorker from a repository
 class networker::install (
+
   $install_client      = $::networker::install_client,
   $install_console     = $::networker::install_console,
   $install_nmda        = $::networker::install_nmda,
@@ -18,10 +19,12 @@ class networker::install (
   $version_sap         = $::networker::version_sap,
   $version_server      = $::networker::version_server,
   $version_storagenode = $::networker::version_storagenode,) {
+
   case $::osfamily {
     RedHat, Debian : {
       # Install the client
       if $install_client {
+
         package { $package_client:
           ensure => $version_client
         }

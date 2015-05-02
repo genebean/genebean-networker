@@ -1,5 +1,6 @@
 # Defaults for all parameters.
 class networker::params {
+
   $connection_portrange = '0-0'
   $install_client       = true
   $install_console      = false
@@ -15,13 +16,16 @@ class networker::params {
   $package_sap          = 'lgtonmsap'
   $servers              = []
   $servers_file         = 'template'
+  $servers_file_ensure  = 'present'
   $servers_file_name    = 'networker_servers'
+  $service              = 'running'
+  $service_enable       = true
   $service_portrange    = '7937-9936'
-  $version_client       = present
-  $version_console      = present
-  $version_nmda         = present
-  $version_sap          = present
-  $version_server       = present
-  $version_storagenode  = present
+  $version_client       = 'present'
+  $version_console      = 'present'
+  $version_nmda         = 'present'
+  $version_sap          = 'present'
+  $version_server       = 'present'
+  $version_storagenode  = 'present'
 
 }

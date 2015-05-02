@@ -26,12 +26,16 @@ the client has access to.  It also manages the `servers` file.
 ### What networker affects
 
 * the `lgtoclnt` and `lgtoman` packages
+* the `lgtonmc` management console package
+* the `lgtonode` storage node package
+* the `lgtonmsap` SAP backup module package
+* the `lgtonmda` Database backup module package
 * the content in `/nsr/res/servers`
 * the service `networker`
 
 ### Setup Requirements
 
-An assumption is made that you have setup a private repository to hold the
+An assumption is made that you have already setup a private repository to hold the
 packages for installing the NetWorker client.
 
 ### Beginning with networker
@@ -44,7 +48,7 @@ access the client via a parameter or via [the file backend to hiera][hiera-file]
 
 Basic usage:
 ```puppet
-include networker
+include ::networker
 ```
 
 Set the servers allowed to access the client:
@@ -53,6 +57,7 @@ class { 'networker':
   servers => ['server1.example.com', 'server2.example.com'],
 }
 ```
+or in hiera:
 
 Pull the file representing `/nsr/res/servers` from hiera:
 ```puppet
@@ -61,80 +66,133 @@ class { 'networker':
 }
 ```
 
+### Setup with hiera
+
+#### Set the networker backup servers
+```yaml
+networker::servers:
+  - backup01
+  - backup01.mydomain
+  - backup02
+  - backup02.myotherdomain
+```
+
+#### Install networker server
+To install the networker server, add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install_server: true
+```
+
+In most cases it is neccessary on networker servers, to have `/nsr/res/servers` absent.
+```yaml
+networker::servers_file_ensure: 'absent'
+```
+
+#### Install networker storage node
+To install the networker storage node, add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install_storagenode: true
+```
+
+#### Install networker console
+To install the networker console, add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install_console: true
+```
+
+#### Install additional networker modules
+To install the networker NMDA module (for backing up databases), add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install_nmda: true
+```
+
+To install the networker SAP module (for backing up SAP systems), add the following to your hiera (node/profile) configuration:
+```yaml
+networker::install_sap: true
+```
+
 ## Parameters
 
 ### Package Installation
 
 #### `install_client`  
 Installs the Networker client packages "lgtoclnt", "lgtoman"  
+
 Default: `true`  
 Hiera parameter: `networker::install::install_client`
 
 #### `install_console`  
 Installs the Networker console package "lgtonmc"  
+
 Default: `false`  
 Hiera parameter: `networker::install::install_console``
 
 #### `install_nmda`  
 Installs the Networker Module for Databases and Applications package "lgtonmda"  
+
 Default: `false`  
 Hiera parameter: `networker::install::install_nmda`
 
 #### `install_sap`  
 Installs the Networker Module for SAP package "lgtonmsap"  
+
 Default: `false`  
 Hiera parameter: `networker::install::install_sap`
 
 #### `install_server`  
 Installs the Networker server package "lgtoserv"  
+
 Default: `false`  
 Hiera parameter: `networker::install::install_server`
 
 #### `install_storagenode`  
 Installs the Networker storagenode package "lgtonode"  
+
 Default: `false`  
 Hiera parameter: `networker::install::install_storagenode`
 
 #### `version_client`  
 Sets the version of the client to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_client`
 
 #### `version_console`  
 Sets the version of the console to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_console`
 
 #### `version_nmda`  
 Sets the version of the nmda module to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_nmda`
 
 #### `version_sap`  
 Sets the version of the sap module to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_sap`
 
 #### `version_server`  
 Sets the version of the server to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_server`
 
 #### `version_storagenode`  
 Sets the version of the storagenode to install.  
+
 Default: `present`  
 Hiera parameter: `networker::install::version_storagenode`
 
 
 ### Config Settings
 
-#### `connection_portrange`  
-Sets the system's connection ports to the ranges specified.  
-Type: String  
-Default: `0-0`
-
 #### `servers`  
 The servers that should be entered into `/nsr/res/servers`  
+
 Type: array  
 Default: `[]`  
 
@@ -152,26 +210,57 @@ Default: `'template'`
 #### `servers_file_name`  
 The name of the file in hiera that contains the desired contents of
 `/nsr/res/servers`  
+
 Type: String  
 Default: `'networker_servers'`  
 
-#### `service_portrange`  
-Sets the system's service ports to the ranges specified.  
+#### `servers_file_ensure`  
+For the networker server installation it may be an option not to deploy the `/nsr/res/servers` file.
+
+Type: String
+Default: `'present'`
+Hiera parameter: `networker::servers_file_ensure`
+
+#### `service`
+The status of the service (running/stopped)
+
+Type: String
+Default: `'running'`
+Hiera parameter: `networker::service`
+
+#### `service_enable`
+Autostart the networker service on boot
+
+Type: Boolean
+Default: `true`
+Hiera parameter: `networker::service_enable`
+
+#### `service_portrange`
+Sets the system's service ports to the ranges specified.
+
 Type: String  
 Default: `7937-9936`
+
+#### `connection_portrange`
+Sets the system's connection ports to the ranges specified.
+
+Type: String  
+Default: `0-0`
 
 
 ## Limitations
 
 This should work on the `RedHat` and `Debian` families of OS's. Additional
-support is welcomed, just submit an issue with the details.  Support for
-Windows is planned for a future release.
+support is welcome, just submit an issue with the details.  Support for
+Windows is planned for a future release, same is for AIX.
+
 
 ## Development
 
 Pull requests are welcomed!  Many thanks to [Sebastian Ickler][dev-icklers]
 for adding features beyond the client setup to this module. If you add any code
 please try to make sure it will only be executed on OS's that support it.
+
 
 ## License
 

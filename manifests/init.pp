@@ -36,7 +36,10 @@ class networker (
   $package_storagenode  = $::networker::params::package_storagenode,
   $servers              = $::networker::params::servers,
   $servers_file         = $::networker::params::servers_file,
+  $servers_file_ensure  = $::networker::params::servers_file_ensure,
   $servers_file_name    = $::networker::params::servers_file_name,
+  $service              = $::networker::params::service,
+  $service_enable       = $::networker::params::service_enable,
   $service_portrange    = $::networker::params::service_portrange,
   $version_client       = $::networker::params::version_client,
   $version_console      = $::networker::params::version_console,
@@ -45,11 +48,13 @@ class networker (
   $version_server       = $::networker::params::version_server,
   $version_storagenode  = $::networker::params::version_storagenode,) inherits
 ::networker::params {
+
   # validate parameters
   validate_string($servers_file)
   validate_array($servers)
   validate_string($service_portrange)
   validate_string($connection_portrange)
+
 
   anchor { '::networker::start':
   } ->

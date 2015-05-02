@@ -21,3 +21,4 @@ Facter.add(:nsr_connectionports) do
     end
   end
 end
+
