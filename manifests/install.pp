@@ -19,7 +19,7 @@ class networker::install (
   $version_server      = $::networker::version_server,
   $version_storagenode = $::networker::version_storagenode,) {
   case $::osfamily {
-    RedHat, Debian : {
+    'RedHat', 'Debian' : {
       # Install the client
       if $install_client {
         package { $package_client:

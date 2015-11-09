@@ -4,7 +4,7 @@ class networker::service (
   $service_portrange    = $::networker::service_portrange,
   ) {
   case $::osfamily {
-    RedHat, Debian : {
+    'RedHat', 'Debian' : {
       service { 'networker':
         ensure     => 'running',
         enable     => true,
@@ -22,7 +22,7 @@ class networker::service (
 
   # Set Portranges once the service is running
   case $::kernel {
-    Linux   : {
+    'Linux'   : {
       if $::nsr_serviceports != $service_portrange {
         exec { 'set_nsr_serviceports':
           command   => "/usr/bin/nsrports -S ${service_portrange}",

@@ -5,7 +5,7 @@ class networker::config (
   $servers_file_name    = $::networker::servers_file_name,
   ) {
   case $::osfamily {
-    RedHat, Debian : {
+    'RedHat', 'Debian' : {
       file { '/nsr':
         ensure => 'directory',
         before => File['/nsr/res'],
@@ -17,7 +17,7 @@ class networker::config (
       }
 
       case $servers_file {
-        hiera    : {
+        'hiera'    : {
           file { '/nsr/res/servers':
             ensure  => 'present',
             content => hiera($servers_file_name),
@@ -26,7 +26,7 @@ class networker::config (
           }
         }
 
-        template : {
+        'template' : {
           file { '/nsr/res/servers':
             ensure  => 'present',
             content => template('networker/servers.erb'),
