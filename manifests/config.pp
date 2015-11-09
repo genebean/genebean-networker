@@ -1,10 +1,9 @@
 # Configures the NetWorker client
 class networker::config (
-  $connection_portrange = $::networker::connection_portrange,
   $servers              = $::networker::servers,
   $servers_file         = $::networker::servers_file,
   $servers_file_name    = $::networker::servers_file_name,
-  $service_portrange    = $::networker::service_portrange,) {
+  ) {
   case $::osfamily {
     RedHat, Debian : {
       file { '/nsr':
@@ -49,29 +48,4 @@ class networker::config (
 
   } # end case
 
-
-  # Set Portranges
-  case $::kernel {
-    Linux   : {
-      # if $::nsr_serviceports == "nsrexecd not running" {
-      #}
-      if $::nsr_serviceports != $service_portrange {
-        exec { 'set_nsr_serviceports':
-          command   => "/usr/bin/nsrports -S ${service_portrange}",
-          subscribe => Service['networker'],
-        }
-      }
-
-      if $::nsr_connectionports != $connection_portrange {
-        exec { 'set_nsr_connectionports':
-          command   => "/usr/bin/nsrports -C ${connection_portrange}",
-          subscribe => Service['networker'],
-        }
-      }
-    } # end Linux
-
-    default : {
-    }
-
-  } # end case $::kernel
 }
