@@ -1,5 +1,10 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2015-11-09 Release 1.1.2  
+- Fixed circular dependency related to setting ports
+- Updated test matrix to include Puppet 4
+- Fixed manifests with unquoted variables
+
 ## 2015-04-23 Release 1.1.0  
 - Alphabetized many things
 - Added code to make this only run on Linux for now
