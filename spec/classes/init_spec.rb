@@ -5,6 +5,7 @@ describe 'networker' do
     let :facts do
       {
         :osfamily => 'RedHat',
+        :kernel   => 'Linux',
       }
     end
 
