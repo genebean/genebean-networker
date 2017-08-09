@@ -52,14 +52,14 @@ class networker (
   validate_string($connection_portrange)
 
   anchor { '::networker::start':
-  } ->
-  class { '::networker::install':
-  } ->
-  class { '::networker::config':
-  } ->
-  class { '::networker::service':
-  } ->
-  anchor { '::networker::end':
+  }
+  -> class { '::networker::install':
+  }
+  -> class { '::networker::config':
+  }
+  -> class { '::networker::service':
+  }
+  -> anchor { '::networker::end':
   }
 
 } # end networker
