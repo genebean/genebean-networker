@@ -1,0 +1,24 @@
+---
+networker::connection_portrange: '0-0'
+networker::install_client      : true
+networker::install_console     : false
+networker::install_nmda        : false
+networker::install_sap         : false
+networker::install_server      : false
+networker::install_storagenode : false
+networker::package_client      : ['lgtoclnt', 'lgtoman']
+networker::package_console     : 'lgtonmc'
+networker::package_nmda        : 'lgtonmda'
+networker::package_server      : 'lgtoserv'
+networker::package_storagenode : 'lgtonode'
+networker::package_sap         : 'lgtonmsap'
+networker::servers             : ['server1.example.com', 'server2.example.com']
+networker::servers_file        : 'template'
+networker::servers_file_name   : 'networker_servers'
+networker::service_portrange   : '7937-9936'
+networker::version_client      : present
+networker::version_console     : present
+networker::version_nmda        : present
+networker::version_sap         : present
+networker::version_server      : present
+networker::version_storagenode : present
