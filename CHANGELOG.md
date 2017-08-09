@@ -1,5 +1,10 @@
 [![GitHub tag][gh-tag-img]][gh-link]
 
+## 2017-08-06 - Release 1.1.3  
+- First run at using modulesync
+- Stopped testing against Puppet 3
+- Started testing against Puppet 5
+
 ## 2015-11-09 Release 1.1.2  
 - Fixed circular dependency related to setting ports
 - Updated test matrix to include Puppet 4

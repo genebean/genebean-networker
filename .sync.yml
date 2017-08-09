@@ -1,0 +1,6 @@
+---
+.travis.yml:
+  slack_rooms:
+    - 'J7gnBc9d2ArsWNMXYyLSpmYrE/kQl2OKIagaQAayAK8ou/Gzj0bw/aSP/WNIc1K5DrUxynjwa5hkxRgAB9tHl9V3ZpWg4KtADjGtHS2UTACWG1BcJXHteuzQ893cCHLywshOLgz3ni9XSMqHCOlEucZTJZk5u0hGpD5VMAG1M7w=' # thecomfyseat
+    - 'Jfe7QLkdBkJPnvrLOcBTghx8Eb1xmp902z/iY6lD0WpciIvci88t2JWm3jj91CWkYsEcS/rG+iY1oKWYpx4yc8GgCyA/ykNyOMOvH6PoAt2DifyIEY22AuMVFiiVl4K9h31/SMnm36YAGqAzrL1+CgtFVa5Nj6De0mj+MTgiHoc=' # uwg-techs
+
