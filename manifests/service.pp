@@ -1,9 +1,6 @@
 # Configures the NetWorker service
-class networker::service (
-  $connection_portrange = $::networker::connection_portrange,
-  $service_portrange    = $::networker::service_portrange,
-  ) {
-  case $::osfamily {
+class networker::service inherits networker {
+  case $facts['os']['family'] {
     'RedHat', 'Debian' : {
       service { 'networker':
         ensure     => 'running',
@@ -21,19 +18,19 @@ class networker::service (
   } # end case
 
   # Set Portranges once the service is running
-  case $::kernel {
+  case $facts['kernel'] {
     'Linux'   : {
-      if $::nsr_serviceports != $service_portrange {
+      if $facts['nsr_serviceports'] != $::networker::service_portrange {
         exec { 'set_nsr_serviceports':
-          command   => "/usr/bin/nsrports -S ${service_portrange}",
+          command   => "/usr/bin/nsrports -S ${::networker::service_portrange}",
           require   => Service['networker'],
           subscribe => Service['networker'],
         }
       }
 
-      if $::nsr_connectionports != $connection_portrange {
+      if $facts['nsr_connectionports'] != $::networker::connection_portrange {
         exec { 'set_nsr_connectionports':
-          command   => "/usr/bin/nsrports -C ${connection_portrange}",
+          command   => "/usr/bin/nsrports -C ${::networker::connection_portrange}",
           require   => Service['networker'],
           subscribe => Service['networker'],
         }

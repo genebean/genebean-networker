@@ -1,10 +1,6 @@
 # Configures the NetWorker client
-class networker::config (
-  $servers              = $::networker::servers,
-  $servers_file         = $::networker::servers_file,
-  $servers_file_name    = $::networker::servers_file_name,
-  ) {
-  case $::osfamily {
+class networker::config inherits networker {
+  case $facts['os']['family'] {
     'RedHat', 'Debian' : {
       file { '/nsr':
         ensure => 'directory',
@@ -16,11 +12,11 @@ class networker::config (
         before => File['/nsr/res/servers'],
       }
 
-      case $servers_file {
+      case $::networker::servers_file {
         'hiera'    : {
           file { '/nsr/res/servers':
             ensure  => 'present',
-            content => hiera($servers_file_name),
+            content => hiera($::networker::servers_file_name),
             require => Package['lgtoclnt'],
             notify  => Service['networker'],
           }
