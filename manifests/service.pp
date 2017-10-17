@@ -3,7 +3,7 @@ class networker::service (
   $connection_portrange = $::networker::connection_portrange,
   $service_portrange    = $::networker::service_portrange,
   ) {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat', 'Debian' : {
       service { 'networker':
         ensure     => 'running',
@@ -14,7 +14,7 @@ class networker::service (
     } # end RedHat
 
     default        : {
-      fail("${::osfamily} is not yet supported by this module.
+      fail("${facts['os']['family']} is not yet supported by this module.
        Please file a bug report if it should be.")
     }
 

@@ -4,7 +4,7 @@ class networker::config (
   $servers_file         = $::networker::servers_file,
   $servers_file_name    = $::networker::servers_file_name,
   ) {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat', 'Debian' : {
       file { '/nsr':
         ensure => 'directory',
@@ -19,7 +19,7 @@ class networker::config (
       case $servers_file {
         'hiera'    : {
           file { '/nsr/res/servers':
-            ensure  => 'present',
+            ensure  => 'file',
             content => hiera($servers_file_name),
             require => Package['lgtoclnt'],
             notify  => Service['networker'],
@@ -28,7 +28,7 @@ class networker::config (
 
         'template' : {
           file { '/nsr/res/servers':
-            ensure  => 'present',
+            ensure  => 'file',
             content => template('networker/servers.erb'),
             require => Package['lgtoclnt'],
             notify  => Service['networker'],
@@ -42,7 +42,7 @@ class networker::config (
     } # end RedHat
 
     default        : {
-      fail("${::osfamily} is not yet supported by this module.
+      fail("${facts['os']['family']} is not yet supported by this module.
        Please file a bug report if it should be.")
     }
 

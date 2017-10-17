@@ -18,7 +18,7 @@ class networker::install (
   $version_sap         = $::networker::version_sap,
   $version_server      = $::networker::version_server,
   $version_storagenode = $::networker::version_storagenode,) {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'RedHat', 'Debian' : {
       # Install the client
       if $install_client {
@@ -65,7 +65,7 @@ class networker::install (
     } # end RedHat
 
     default        : {
-      fail("${::osfamily} is not yet supported by this module.
+      fail("${facts['os']['family']} is not yet supported by this module.
        Please file a bug report if it should be.")
     }
 
